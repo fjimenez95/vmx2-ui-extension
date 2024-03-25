@@ -1,13 +1,57 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'EmberRegular', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  background-color: white;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@font-face {
+  font-family: "EmberCondensedLight";   /*Can be any text*/
+  src: local("AmazonEmberCdRC_Lt"),
+    url("./fonts/Amazon_Typefaces_Complete_Font_Set_Mar2020/Ember Condensed/AmazonEmberCdRC_Lt.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "EmberCondensedRegular";   /*Can be any text*/
+  src: local("AmazonEmberCdRC_Rg"),
+    url("./fonts/Amazon_Typefaces_Complete_Font_Set_Mar2020/Ember Condensed/AmazonEmberCdRC_Rg.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "EmberLight";   /*Can be any text*/
+  src: local("AmazonEmber_Lt"),
+    url("./fonts/Amazon_Typefaces_Complete_Font_Set_Mar2020/Ember/AmazonEmber_Lt.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "EmberRegular";   /*Can be any text*/
+  src: local("AmazonEmber_Rg"),
+    url("./fonts/Amazon_Typefaces_Complete_Font_Set_Mar2020/Ember/AmazonEmber_Rg.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "EmberMedium";   /*Can be any text*/
+  src: local("Amazon-Ember-Medium"),
+    url("./fonts/Amazon_Typefaces_Complete_Font_Set_Mar2020/Ember/Amazon-Ember-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "EmberHeavy";   /*Can be any text*/
+  src: local("AmazonEmber_He"),
+    url("./fonts/Amazon_Typefaces_Complete_Font_Set_Mar2020/Ember/AmazonEmber_He.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "EmberBold";   /*Can be any text*/
+  src: local("AmazonEmber_Bd"),
+    url("./fonts/Amazon_Typefaces_Complete_Font_Set_Mar2020/Ember/AmazonEmber_Bd.ttf") format("truetype");
 }
