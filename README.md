@@ -68,6 +68,7 @@ Want a quicker way to get started? You can deploy the resources above with this 
         2. `RECORDINGS_BUCKET`: This is the S3 bucket where your recordings are dumped. This is created for you as part of the VMX2-VoicemailExpress solution.
         3. `TRANSCRIPTS_BUCKET`: This is the S3 bucket where your transcripts are dumped. This is created for you as part of the VMX2-VoicemailExpress solution.
         4. `PRESIGNER_ARN`: This should come from the VMX2-VoicemailExpress solution. This generates your S3 URL that is used for users to listen to voicemails.
+        
     <details>
     <summary>See full code here</summary>
 
@@ -240,6 +241,7 @@ Want a quicker way to get started? You can deploy the resources above with this 
     * The following environment variables are required in this lambda function.
         1. `DYNAMODB_TABLE`: CloudFormation will provision a DynamoDB table for you and fill this out.
         2. `INSTANCE_ID`: The ID of your Amazon Connect instance.
+
     <details>
     <summary>See full code here</summary>
 
