@@ -25,7 +25,7 @@ import AudioPlayer from './components/AudioPlayer';
 
 function App() {
   // INSERT YOUR API URL HERE
-  const API_URL = "https://pn5eaczu27.execute-api.us-west-2.amazonaws.com/prod/voicemail"
+  const API_URL = "https://y76z8iqauk.execute-api.us-west-2.amazonaws.com/prod/voicemail"
   // FOR TESTING, THIS VALUE WILL COME FROM OS.ENV IN LAMBDA FUNCTION
   const INSTANCE_ID = "90af9b54-69af-4098-97c2-dd742470ca85"
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.username}
@@ -38,8 +38,7 @@ function App() {
 
   const ONLOAD_BODY = {
     'action': 'ONLOAD', 
-    'userId': USER_ID, 
-    'instanceId': INSTANCE_ID,
+    'userId': USER_ID
     // INCLUDE ANY OTHER BODY PARAMTERS YOUR API EXPECTS
   }
   const READ_BODY = {
@@ -154,7 +153,6 @@ function App() {
       }
 
       const data = await response.json();
-      console.log(JSON.parse(data.body));
       await handleRefresh();
       setVisibleDeleteModal(false);
       setVisibleDeleteLoadingButton(false);
@@ -182,6 +180,7 @@ function App() {
       return newlist
     } catch (error) {
       console.log("There was a problem with the fetch operation:", error)
+      setOnload(false);
     }
   }
 
@@ -198,6 +197,7 @@ function App() {
       console.log("REFRESH", voicemailList)
     } catch (error) {
       console.log("There was a problem with the fetch operation:", error)
+      setOnload(false);
     }
   }
 
