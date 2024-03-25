@@ -25,7 +25,7 @@ import AudioPlayer from './components/AudioPlayer';
 
 function App() {
   // INSERT YOUR API URL HERE
-  const API_URL = "https://lp88o3k1dc.execute-api.us-west-2.amazonaws.com/prod/voicemail"
+  const API_URL = "https://pn5eaczu27.execute-api.us-west-2.amazonaws.com/prod/voicemail"
   // FOR TESTING, THIS VALUE WILL COME FROM OS.ENV IN LAMBDA FUNCTION
   const INSTANCE_ID = "90af9b54-69af-4098-97c2-dd742470ca85"
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.username}
@@ -105,6 +105,7 @@ function App() {
       return JSON.parse(data.body)
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
+      setOnload(false);
     }
   };
 
