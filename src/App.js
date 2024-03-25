@@ -25,9 +25,9 @@ import AudioPlayer from './components/AudioPlayer';
 
 function App() {
   // INSERT YOUR API URL HERE
-  const API_URL = "https://pu7zc4wje2.execute-api.us-east-1.amazonaws.com/PROD/voicemails"
+  const API_URL = "https://lp88o3k1dc.execute-api.us-west-2.amazonaws.com/prod/voicemail"
   // FOR TESTING, THIS VALUE WILL COME FROM OS.ENV IN LAMBDA FUNCTION
-  const INSTANCE_ID = "58c06d26-65e1-4579-93ac-5a9066e3fd24"
+  const INSTANCE_ID = "90af9b54-69af-4098-97c2-dd742470ca85"
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.username}
   // THIS USER NAME ATTRIBUTE SHOULD MATCH THE AGENT'S USER NAME IN AMAZON CONNECT
   const USERNAME = "freddyjimenez"
