@@ -12,7 +12,7 @@ Version: 2024.03.28
 
 ## Architecture
 
-![Architecture for VMX2UI-Extension](https://d1khg2kbc0gpyh.cloudfront.net/3papp/VMX2UI_Architecture.png)
+![Architecture for VMX2UI-Extension](https://d1khg2kbc0gpyh.cloudfront.net/3papp/vmx2-ui-architecture.png)
 
 ## Pre-requisites
 1. This deployment is dependent on a setup similar to [VMX2-VoicemailExpress](https://github.com/amazon-connect/amazon-connect-salesforce-scv/tree/master/Solutions/VMX2-VoicemailExpress). If you have not already deployed a voicemail solution, talk to your AWS Solution Architect to understand your use case.
