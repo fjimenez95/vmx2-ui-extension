@@ -26,8 +26,6 @@ import AudioPlayer from './components/AudioPlayer';
 function App() {
   // INSERT YOUR API URL HERE
   const API_URL = process.env.API_URL
-  // FOR TESTING, THIS VALUE WILL COME FROM OS.ENV IN LAMBDA FUNCTION
-  const INSTANCE_ID = ""
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.username}
   // THIS USER NAME ATTRIBUTE SHOULD MATCH THE AGENT'S USER NAME IN AMAZON CONNECT
   const USERNAME = "freddyjimenez"
