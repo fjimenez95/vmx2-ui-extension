@@ -23,6 +23,7 @@ import StatusBar from './components/StatusBar';
 import VoicemailTable from './components/VoicemailTable';
 import AudioPlayer from './components/AudioPlayer';
 
+// ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: function App({signOut, user}) {}
 function App() {
   // INSERT YOUR API URL HERE
   const API_URL = process.env.API_URL
