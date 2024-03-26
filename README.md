@@ -42,7 +42,7 @@ TODO: Pending screenshot
 > :warning: Don't forget that you will need to update VMXKVStoS3 Lambda in VMX2-VoicemailExpress to tag your recordings with phone number. See #3 under Pre-requisites.
 
 ## CloudFormation
-Want a quicker way to get started? You can deploy the resources above with this CloudFormation template.
+Want a quicker way to get started? You can deploy the resources above with [this CloudFormation template](https://d1khg2kbc0gpyh.cloudfront.net/3papp/vmx2-uiextension.yaml).
 
 ### Deployment details
 1. **Amazon DynamoDB** table that will track unread, read, and deleted voicemails. The schema for this table:
@@ -221,6 +221,7 @@ Want a quicker way to get started? You can deploy the resources above with this 
                     print(f"User or instance not found for ARN: {vmx_queue_arn}")
                     return None
             return None
+
         </code></pre>
 
     </details>
@@ -267,7 +268,11 @@ Want a quicker way to get started? You can deploy the resources above with this 
                   return {
                       'statusCode': 400,
                       'body': json.dumps({'error': 'Invalid JSON'}),
-                      'headers': {'Content-Type': 'application/json'}
+                      'headers': {
+                          'Content-Type': 'application/json',
+                          'Access-Control-Allow-Origin': '*',  # Allows access from any origin
+                          'Access-Control-Allow-Credentials': True  # Required for cookies, authorization headers with HTTPS
+                      }
                   }
               
               if 'action' in body:
@@ -286,7 +291,11 @@ Want a quicker way to get started? You can deploy the resources above with this 
                   return {
                       'statusCode': 400,
                       'body': json.dumps({'error': 'Missing parameter'}),
-                      'headers': {'Content-Type': 'application/json'}
+                      'headers': {
+                          'Content-Type': 'application/json',
+                          'Access-Control-Allow-Origin': '*',  # Allows access from any origin
+                          'Access-Control-Allow-Credentials': True  # Required for cookies, authorization headers with HTTPS
+                      }
                   }
 
           def handle_onload_action(user_id, instance_id):
@@ -295,7 +304,11 @@ Want a quicker way to get started? You can deploy the resources above with this 
                   return {
                       'statusCode': 400,
                       'body': json.dumps({'error': 'Failed to retrieve routing profile ID'}),
-                      'headers': {'Content-Type': 'application/json'}
+                      'headers': {
+                          'Content-Type': 'application/json',
+                          'Access-Control-Allow-Origin': '*',  # Allows access from any origin
+                          'Access-Control-Allow-Credentials': True  # Required for cookies, authorization headers with HTTPS
+                      }
                   }
               
               queue_arns = list_routing_profile_queues(routing_profile_id, instance_id)
@@ -303,14 +316,22 @@ Want a quicker way to get started? You can deploy the resources above with this 
                   return {
                       'statusCode': 400,
                       'body': json.dumps({'error': 'Failed to retrieve queue ARNs'}),
-                      'headers': {'Content-Type': 'application/json'}
+                      'headers': {
+                          'Content-Type': 'application/json',
+                          'Access-Control-Allow-Origin': '*',  # Allows access from any origin
+                          'Access-Control-Allow-Credentials': True  # Required for cookies, authorization headers with HTTPS
+                      }
                   }
               
               voicemails = search_voicemails(user_id, queue_arns, instance_id)
               
               return {
                   'statusCode': 200,
-                  'headers': {'Content-Type': 'application/json'},
+                  'headers': {
+                          'Content-Type': 'application/json',
+                          'Access-Control-Allow-Origin': '*',  # Allows access from any origin
+                          'Access-Control-Allow-Credentials': True  # Required for cookies, authorization headers with HTTPS
+                      },
                   'body': json.dumps(voicemails)
               }
 
@@ -344,14 +365,22 @@ Want a quicker way to get started? You can deploy the resources above with this 
                   return {
                       'statusCode': 200,
                       'body': json.dumps({'message': f'Read action performed for contact ID {contact_id} by user {username}', 'updated_item': updated_item}),
-                      'headers': {'Content-Type': 'application/json'}
+                      'headers': {
+                          'Content-Type': 'application/json',
+                          'Access-Control-Allow-Origin': '*',  # Allows access from any origin
+                          'Access-Control-Allow-Credentials': True  # Required for cookies, authorization headers with HTTPS
+                      }
                   }
               except Exception as e:
                   print(f"Error updating voicemail read status: {e}")
                   return {
                       'statusCode': 500,
                       'body': json.dumps({'error': 'Could not update voicemail unread status'}),
-                      'headers': {'Content-Type': 'application/json'}
+                      'headers': {
+                          'Content-Type': 'application/json',
+                          'Access-Control-Allow-Origin': '*',  # Allows access from any origin
+                          'Access-Control-Allow-Credentials': True  # Required for cookies, authorization headers with HTTPS
+                      }
                   }
 
           # Helper functions
@@ -424,12 +453,13 @@ Want a quicker way to get started? You can deploy the resources above with this 
                   return voicemails
               except Exception as e:
                   print(f"Error searching voicemails: {e}")
-                  return []</code></pre>
+                  return []
+      </code></pre>
     </details>
 1. **AWS API Gateway - Rest API** to handle CRUD designed in AWS Lambda function above. This will provide an invoke URL for use in your application. By default, this API has no level of authentication. Note that API Gateway should generally be protected by authorization or api key. Be sure to update this for your use case.
 
 ## To get started
-1. Run the CloudFormation stack to deploy the resources above. Save the VoicemailAPIEndpoint invoke URL as you will need this in your application.
+1. Run the [CloudFormation](https://d1khg2kbc0gpyh.cloudfront.net/3papp/vmx2-uiextension.yaml) stack to deploy the resources above. Save the VoicemailAPIEndpoint invoke URL as you will need this in your application.
 1. If you haven't already, update **vmx_kvs_to_s3.js** in your **VMXKVStoS3** AWS Lambda function deployed from VMX2-VoicemailExpress to tag your recordings with the phone number upon which voicemail was received from. To do this, replace Line 124 with the below line. Ensure proper indenting after pasting into your code.
     ```python
         if (key.startsWith('vmx_lang')||key.startsWith('vmx_queue_arn')||key.startsWith('vmx_from')){
