@@ -68,7 +68,7 @@ Want a quicker way to get started? You can deploy the resources above with this 
         2. `RECORDINGS_BUCKET`: This is the S3 bucket where your recordings are dumped. This is created for you as part of the VMX2-VoicemailExpress solution.
         3. `TRANSCRIPTS_BUCKET`: This is the S3 bucket where your transcripts are dumped. This is created for you as part of the VMX2-VoicemailExpress solution.
         4. `PRESIGNER_ARN`: This should come from the VMX2-VoicemailExpress solution. This generates your S3 URL that is used for users to listen to voicemails.
-        
+
     <details>
     <summary>See full code here</summary>
 
@@ -446,3 +446,6 @@ Want a quicker way to get started? You can deploy the resources above with this 
 1. Select **Authentication** on the left hand pane.
 1. Select **Add login mechanism**. Configure your authentication method. You will need to configure sign-up, however you can remove this later - as most users will probably prefer to not have anyone sign up.
     * You can set up a `UserId` attribute under **Add attribute**. You can do this now or do this later in AWS Cognito. This will be required to pull in user information and Amazon Connect routing profile details upon login. This attribute will let UI know which Queues are associated to the routing profile of the user and what emails can be displayed.
+1. Once you've completed setup, you can add authentication into your app. Learn more [here](https://docs.amplify.aws/javascript/build-a-backend/auth/set-up-auth/) on how to get set up with Authentication in a few steps.
+1. Once authentication is added, there are notes in **App.js** that are commented `// ONCE AMPLIFY AUTHENTICATION IS DEPLOYED`. Make these changes. The goal here is to ensure you are passing the right variables from your Cognito user to the app.
+
