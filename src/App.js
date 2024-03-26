@@ -25,16 +25,16 @@ import AudioPlayer from './components/AudioPlayer';
 
 function App() {
   // INSERT YOUR API URL HERE
-  const API_URL = "https://y76z8iqauk.execute-api.us-west-2.amazonaws.com/prod/voicemail"
+  const API_URL = process.env.API_URL
   // FOR TESTING, THIS VALUE WILL COME FROM OS.ENV IN LAMBDA FUNCTION
-  const INSTANCE_ID = "90af9b54-69af-4098-97c2-dd742470ca85"
+  const INSTANCE_ID = ""
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.username}
   // THIS USER NAME ATTRIBUTE SHOULD MATCH THE AGENT'S USER NAME IN AMAZON CONNECT
   const USERNAME = "freddyjimenez"
   const CONTACTID = ""
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.<attribute_name_with_user_id_in_it>}
   // THIS USER ID ATTRIBUTE SHOULD MATCH THE AGENT'S USER ID IN AMAZON CONNECT
-  const USER_ID = "73fa94d0-f885-4e05-99a9-061679083b45"
+  const USER_ID = "85446bc9-aea1-4c99-9b0f-f95d36fecc95"
 
   const ONLOAD_BODY = {
     'action': 'ONLOAD', 
@@ -101,7 +101,7 @@ function App() {
       }
 
       const data = await response.json();
-      return JSON.parse(data.body)
+      return data
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
       setOnload(false);

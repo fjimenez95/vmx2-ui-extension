@@ -68,7 +68,17 @@ function AudioPlayer(props) {
                         </div>
                     </div>
                     :
-                    <div>Select a voicemail to see transcript</div>
+                    (props.selectedItems.length ? <div>
+                        <Header
+                        variant="h3"
+                        description="Powered by Amazon Transcribe"
+                        >
+                        Transcript
+                        </Header>
+                        <div id="notranscriptredtext">
+                            <div>There is no transcript for this voicemail.</div>
+                        </div>
+                    </div> : <div>Select a voicemail to see transcript</div>)
                 }
                 header={
                     <Header

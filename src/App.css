@@ -179,3 +179,8 @@
 .newbadge {
   margin-right: 10px;
 }
+
+#notranscriptredtext {
+  padding: 10px;
+  color: #0872d3;
+}
