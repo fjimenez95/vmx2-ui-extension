@@ -26,15 +26,15 @@ import AudioPlayer from './components/AudioPlayer';
 // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: function App({signOut, user}) {}
 function App() {
   // INSERT YOUR API URL HERE
-  const API_URL = process.env.API_URL || ""
+  const API_URL = process.env.API_URL || "https://ksi4keqph9.execute-api.us-east-1.amazonaws.com/prod/voicemail"
   console.log("API_URL", API_URL)
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.username}
   // THIS USER NAME ATTRIBUTE SHOULD MATCH THE AGENT'S USER NAME IN AMAZON CONNECT
-  const USERNAME = ""
+  const USERNAME = "freddyjimenez"
   const CONTACTID = ""
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.<attribute_name_with_user_id_in_it>}
   // THIS USER ID ATTRIBUTE SHOULD MATCH THE AGENT'S USER ID IN AMAZON CONNECT
-  const USER_ID = ""
+  const USER_ID = "73fa94d0-f885-4e05-99a9-061679083b45"
 
   const ONLOAD_BODY = {
     'action': 'ONLOAD', 
@@ -182,8 +182,8 @@ function App() {
       setFilteredVoicemailList(newlist)
       var size = 10; 
       var splicing_response = [];
-      for (var i=0; i<filteredVoicemailList.length; i+=size) {
-        splicing_response.push(filteredVoicemailList.slice(i,i+size));
+      for (var i=0; i<newlist.length; i+=size) {
+        splicing_response.push(newlist.slice(i,i+size));
       }
       console.log(splicing_response);
       setSplicedList(splicing_response)
