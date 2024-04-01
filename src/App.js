@@ -26,15 +26,15 @@ import AudioPlayer from './components/AudioPlayer';
 // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: function App({signOut, user}) {}
 function App() {
   // INSERT YOUR API URL HERE
-  const API_URL = process.env.API_URL || "https://ksi4keqph9.execute-api.us-east-1.amazonaws.com/prod/voicemail"
+  const API_URL = process.env.API_URL || ""
   console.log("API_URL", API_URL)
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.username}
   // THIS USER NAME ATTRIBUTE SHOULD MATCH THE AGENT'S USER NAME IN AMAZON CONNECT
-  const USERNAME = "freddyjimenez"
+  const USERNAME = ""
   const CONTACTID = ""
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.<attribute_name_with_user_id_in_it>}
   // THIS USER ID ATTRIBUTE SHOULD MATCH THE AGENT'S USER ID IN AMAZON CONNECT
-  const USER_ID = "73fa94d0-f885-4e05-99a9-061679083b45"
+  const USER_ID = ""
 
   const ONLOAD_BODY = {
     'action': 'ONLOAD', 
