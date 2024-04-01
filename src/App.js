@@ -30,8 +30,6 @@ function App({signOut, user}) {
   // INSERT YOUR API URL HERE
   const API_URL = process.env.REACT_APP_API_URL
   console.log("API_URL", API_URL)
-  var USERNAME
-  var USER_ID
 
   // DEFINES CONSTANTS, STATE
   const [voicemailList, setVoicemailList] = useState([])
@@ -45,13 +43,14 @@ function App({signOut, user}) {
   const [filteringText, setFilteringText] = useState("")
   const [visibleDeleteModal, setVisibleDeleteModal] = useState(false);
   const [visibleDeleteLoadingButton, setVisibleDeleteLoadingButton] = useState(false);
-  const audioElem = useRef(0);
   const [currPageIndex, setCurrPageIndex] = useState(1);
   const [splicedList, setSplicedList] = useState([]);
   const [pageCount, setPageCount] = useState(splicedList.length);
   const [countTextVisible, setCountTextVisible] = useState(false);
   const [globalUsername, setGlobalUsername] = useState("")
   const [globalUserId, setGlobalUserId] = useState("")
+  const [globalName, setGlobalName] = useState("")
+  const audioElem = useRef(0);
 
   // HANDLES AUDIO ELEMENT AND PLAYER TIME
   const onPlaying = async () => {
@@ -146,7 +145,7 @@ function App({signOut, user}) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      await response.json();
       await handleRefresh();
       setVisibleDeleteModal(false);
       setVisibleDeleteLoadingButton(false);
@@ -162,6 +161,7 @@ function App({signOut, user}) {
       var userAttributes = await fetchUserAttributes()
       setGlobalUserId(userAttributes.locale)
       setGlobalUsername(userAttributes.preferred_username)
+      setGlobalName(userAttributes.name)
       const voicemailList = await fetchData(userAttributes.locale)
       const newlist = await voicemailList.sort((a, b) => {
         if (a.unread > b.unread) return -1;
@@ -227,15 +227,12 @@ function App({signOut, user}) {
     <div className="App">
         {/* PAGE HEADER */}
         <Header 
-          // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: fullName={user.attributes.name}
-          fullName="Nikki Wolf"
-          // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: signOut={signOut}
-          signOut={fetchVoicemails}
+          fullName={globalName}
+          signOut={signOut}
           />
         {/* DISPLAYS STATUS OF UNREAD VOICEMAILS */}
         <StatusBar 
-          // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: fullName={user.attributes.name}
-          fullName="Nikki Wolf"
+          fullName={globalName}
           totalUnread={totalUnread}
           />
         {/* WHERE AUDIO IS LOADED */}
