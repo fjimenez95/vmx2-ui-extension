@@ -22,38 +22,16 @@ import Header from './components/Header';
 import StatusBar from './components/StatusBar';
 import VoicemailTable from './components/VoicemailTable';
 import AudioPlayer from './components/AudioPlayer';
+import { fetchUserAttributes } from 'aws-amplify/auth';
+import { withAuthenticator } from '@aws-amplify/ui-react'
 
 // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: function App({signOut, user}) {}
-function App() {
+function App({signOut, user}) {
   // INSERT YOUR API URL HERE
   const API_URL = process.env.REACT_APP_API_URL
   console.log("API_URL", API_URL)
-  // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.username}
-  // THIS USER NAME ATTRIBUTE SHOULD MATCH THE AGENT'S USER NAME IN AMAZON CONNECT
-  const USERNAME = "freddyjimenez"
-  const CONTACTID = ""
-  // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.<attribute_name_with_user_id_in_it>}
-  // THIS USER ID ATTRIBUTE SHOULD MATCH THE AGENT'S USER ID IN AMAZON CONNECT
-  const USER_ID = "73fa94d0-f885-4e05-99a9-061679083b45"
-
-  const ONLOAD_BODY = {
-    'action': 'ONLOAD', 
-    'userId': USER_ID
-    // INCLUDE ANY OTHER BODY PARAMTERS YOUR API EXPECTS
-  }
-  const READ_BODY = {
-    'action': 'READ',
-    'username': USERNAME, 
-    'contactId': CONTACTID, // UPDATED IN markUnread
-    'unread': null // UPDATED IN markUnread
-    // INCLUDE ANY OTHER BODY PARAMTERS YOUR API EXPECTS
-  }
-  const DELETE_BODY = {
-    'action': 'DELETE',
-    'username': USERNAME, 
-    'contactId': CONTACTID, // UPDATED IN handleDelete
-    // INCLUDE ANY OTHER BODY PARAMTERS YOUR API EXPECTS
-  }
+  var USERNAME
+  var USER_ID
 
   // DEFINES CONSTANTS, STATE
   const [voicemailList, setVoicemailList] = useState([])
@@ -68,10 +46,12 @@ function App() {
   const [visibleDeleteModal, setVisibleDeleteModal] = useState(false);
   const [visibleDeleteLoadingButton, setVisibleDeleteLoadingButton] = useState(false);
   const audioElem = useRef(0);
-  const [pageCount, setPageCount] = useState(1);
   const [currPageIndex, setCurrPageIndex] = useState(1);
   const [splicedList, setSplicedList] = useState([]);
+  const [pageCount, setPageCount] = useState(splicedList.length);
   const [countTextVisible, setCountTextVisible] = useState(false);
+  const [globalUsername, setGlobalUsername] = useState("")
+  const [globalUserId, setGlobalUserId] = useState("")
 
   // HANDLES AUDIO ELEMENT AND PLAYER TIME
   const onPlaying = async () => {
@@ -89,7 +69,7 @@ function App() {
   }
 
   // MAIN API FETCHER
-  const fetchData = async () => {
+  const fetchData = async (USER_ID) => {
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -97,7 +77,11 @@ function App() {
           'Content-Type': 'application/json'
           // Include any other headers your API requires
         },
-        body: JSON.stringify(ONLOAD_BODY),
+        body: JSON.stringify({
+          'action': 'ONLOAD', 
+          'userId': USER_ID
+          // INCLUDE ANY OTHER BODY PARAMTERS YOUR API EXPECTS
+        }),
       });
 
       if (!response.ok) {
@@ -113,9 +97,7 @@ function App() {
   };
 
   // MARKS VOICEMAILS UNREAD, TRUE OR FALSE
-  const markUnread = async (state, contactId) => {
-    READ_BODY['unread'] = state
-    READ_BODY['contactId'] = contactId
+  const markUnread = async (state, contactId) => {  
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -123,16 +105,20 @@ function App() {
           'Content-Type': 'application/json'
           // Include any other headers your API requires
         },
-        body: JSON.stringify(READ_BODY),
+        body: JSON.stringify({
+          'action': 'READ',
+          'username': globalUsername, // From ONLOAD
+          'contactId': contactId, // UPDATED IN markUnread
+          'unread': state // UPDATED IN markUnread
+          // INCLUDE ANY OTHER BODY PARAMTERS YOUR API EXPECTS
+        }),
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
       const data = await response.json();
-      console.log(JSON.parse(data.body));
-      return JSON.parse(data.body)
+      return
     } catch (error) {
       console.error("There was a problem with the update unread operation:", error);
     }
@@ -140,7 +126,6 @@ function App() {
 
   // DELETES VOICEMAILS
   const handleDelete = async (contactId) => {
-    DELETE_BODY['contactId'] = contactId
     setVisibleDeleteLoadingButton(true);
     try {
       const response = await fetch(API_URL, {
@@ -149,7 +134,12 @@ function App() {
           'Content-Type': 'application/json'
           // Include any other headers your API requires
         },
-        body: JSON.stringify(DELETE_BODY),
+        body: JSON.stringify({
+          'action': 'DELETE',
+          'username': globalUsername, // From ONLOAD
+          'contactId': contactId, // UPDATED IN handleDelete
+          // INCLUDE ANY OTHER BODY PARAMTERS YOUR API EXPECTS
+        }),
       });
 
       if (!response.ok) {
@@ -160,7 +150,7 @@ function App() {
       await handleRefresh();
       setVisibleDeleteModal(false);
       setVisibleDeleteLoadingButton(false);
-      return JSON.parse(data.body)
+      return
     } catch (error) {
       console.error("There was a problem with the Delete operation:", error);
     }
@@ -169,7 +159,10 @@ function App() {
   // FETCHES VOICEMAIL DATA AND REORDERS LIST BASED ON TIME
   const fetchVoicemails = async () => {
     try {
-      const voicemailList = await fetchData()
+      var userAttributes = await fetchUserAttributes()
+      setGlobalUserId(userAttributes.locale)
+      setGlobalUsername(userAttributes.preferred_username)
+      const voicemailList = await fetchData(userAttributes.locale)
       const newlist = await voicemailList.sort((a, b) => {
         if (a.unread > b.unread) return -1;
         if (a.unread < b.unread) return 1;
@@ -187,7 +180,7 @@ function App() {
       }
       console.log(splicing_response);
       setSplicedList(splicing_response)
-      setPageCount(splicedList.length)
+      setPageCount(splicing_response.length)
       setOnload(false)
       return newlist
     } catch (error) {
@@ -281,6 +274,7 @@ function App() {
           visibleDeleteModal={visibleDeleteModal}
           setVisibleDeleteModal={setVisibleDeleteModal}
           visibleDeleteLoadingButton={visibleDeleteLoadingButton}
+          setVisibleDeleteLoadingButton={setVisibleDeleteLoadingButton}
           pageCount={pageCount}
           setPageCount={setPageCount}
           currPageIndex={currPageIndex}
@@ -295,4 +289,4 @@ function App() {
 }
 
 // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: export default withAuthenticator(App);
-export default App;
+export default withAuthenticator(App);

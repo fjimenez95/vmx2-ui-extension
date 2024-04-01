@@ -34,7 +34,7 @@ function VoicemailTable(props) {
             props.handleRefresh()
         }
         if (e.detail.id === "dl") {
-            alert("Insert download")
+            window.open(props.selectedItems[0].presigned_url, '_blank');
         }
         else if (e.detail.id === "del") {
             props.setVisibleDeleteModal(true)
@@ -277,50 +277,6 @@ function VoicemailTable(props) {
                         props.setCurrPageIndex(detail.currentPageIndex)
                         } />
                 }
-                preferences={
-                    <CollectionPreferences
-                    title="Preferences"
-                    confirmLabel="Confirm"
-                    cancelLabel="Cancel"
-                    preferences={{
-                        pageSize: 10,
-                        contentDisplay: [
-                        { id: "fileName", visible: true },
-                        { id: "phoneNumber", visible: true },
-                        { id: "date", visible: true },
-                        { id: "actions", visible: true }
-                        ]
-                    }}
-                    pageSizePreference={{
-                        title: "Page size",
-                        options: [
-                        { value: 10, label: "10 voicemails" },
-                        { value: 20, label: "20 voicemails" }
-                        ]
-                    }}
-                    stickyColumnsPreference={{
-                        firstColumns: {
-                        title: "Stick first column(s)",
-                        description:
-                            "Keep the first column(s) visible while horizontally scrolling the table content.",
-                        options: [
-                            { label: "None", value: 0 },
-                            { label: "First column", value: 1 },
-                            { label: "First two columns", value: 2 }
-                        ]
-                        },
-                        lastColumns: {
-                        title: "Stick last column",
-                        description:
-                            "Keep the last column visible while horizontally scrolling the table content.",
-                        options: [
-                            { label: "None", value: 0 },
-                            { label: "Last column", value: 1 }
-                        ]
-                        }
-                    }}
-                    />
-      }
         />
         <Modal
         onDismiss={() => props.setVisibleDeleteModal(false)}
@@ -328,7 +284,7 @@ function VoicemailTable(props) {
         footer={
             <Box float="right">
             <SpaceBetween direction="horizontal" size="xs">
-                <Button variant="link" onClick={() => props.setVisibleDeleteModal(false)}>Cancel</Button>
+                <Button variant="link" onClick={() => {props.setVisibleDeleteModal(false); props.setVisibleDeleteLoadingButton(false)}}>Cancel</Button>
                 {props.visibleDeleteLoadingButton ? <Button loading variant="primary">Delete</Button> : <Button variant="primary" onClick={() => props.handleDelete(props.selectedItems[0].contactId)}>Delete</Button>}
             </SpaceBetween>
             </Box>
