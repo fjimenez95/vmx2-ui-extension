@@ -26,11 +26,11 @@ import { fetchUserAttributes } from 'aws-amplify/auth';
 import { withAuthenticator } from '@aws-amplify/ui-react'
 
 // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: function App({signOut, user}) {}
-function App({signOut, user}) {
+function App({ signOut, user }) {
   // INSERT YOUR API URL HERE
   const API_URL = process.env.REACT_APP_API_URL
   console.log("API_URL", API_URL)
-
+  console.log("user", user)
   // DEFINES CONSTANTS, STATE
   const [voicemailList, setVoicemailList] = useState([])
   const [filteredVoicemailList, setFilteredVoicemailList] = useState([])
