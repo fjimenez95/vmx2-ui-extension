@@ -132,7 +132,7 @@ function VoicemailTable(props) {
                     { id: "readbyusername", visible: true },
                     { id: "actions", visible: true }
                 ]}
-                items={props.filteredVoicemailList}
+                items={props.splicedList[props.currPageIndex - 1]}
                 loading={props.onload}
                 loadingText="Loading"
                 selectionType="single"
@@ -154,19 +154,38 @@ function VoicemailTable(props) {
                     <TextFilter
                     filteringPlaceholder="Search voicemails"
                     filteringText={props.filteringText}
+                    countText = { props.countTextVisible ? `${props.filteredVoicemailList.length} matches` : "" }
                     onChange={({ detail }) => {
                         props.setFilteringText(detail.filteringText)
                         if (detail.filteringText) { 
                             const filteredData = props.voicemailList.filter(item => {
-                            // Convert all values of the contact object to a string, join     them, convert the string to lowercase and return the contact object if it includes the searchValue
-                            return Object.values(item)
-                                .join('')
-                                .toLowerCase()
-                                .includes(detail.filteringText.toLowerCase());
-                            });
-                            props.setFilteredVoicemailList(filteredData); // Update filteredContacts state with filtered array
+                                // Convert all values of the contact object to a string, join     them, convert the string to lowercase and return the contact object if it includes the searchValue
+                                return Object.values(item)
+                                    .join('')
+                                    .toLowerCase()
+                                    .includes(detail.filteringText.toLowerCase());
+                                });
+                            props.setFilteredVoicemailList(filteredData)
+                            props.setCountTextVisible(true)
+                            var size = 10; 
+                            var splicing_response = [];
+                            for (var i=0; i<filteredData.length; i+=size) {
+                                splicing_response.push(filteredData.slice(i,i+size));
+                            }
+                            console.log(splicing_response);
+                            props.setSplicedList(splicing_response)
+                            props.setPageCount(splicing_response.length)
                         } else {
-                            props.setFilteredVoicemailList(props.voicemailList); // Reset filteredContacts to all contacts when input is empty
+                            var size = 10; 
+                            var splicing_response = [];
+                            for (var i=0; i<props.voicemailList.length; i+=size) {
+                                splicing_response.push(props.voicemailList.slice(i,i+size));
+                              }
+                            console.log(splicing_response);
+                            props.setSplicedList(splicing_response)
+                            props.setPageCount(splicing_response.length)
+                            props.setFilteredVoicemailList(props.voicemailList)
+                            props.setCountTextVisible(false) // Reset filteredContacts to all contacts when input is empty
                         }
                     }
                 }
@@ -254,7 +273,9 @@ function VoicemailTable(props) {
                     </div>
                 }
                 pagination={
-                    <Pagination currentPageIndex={1} pagesCount={1} />
+                    <Pagination currentPageIndex={props.currPageIndex} pagesCount={props.pageCount} onChange={({ detail }) =>
+                        props.setCurrPageIndex(detail.currentPageIndex)
+                        } />
                 }
                 preferences={
                     <CollectionPreferences
@@ -273,8 +294,8 @@ function VoicemailTable(props) {
                     pageSizePreference={{
                         title: "Page size",
                         options: [
-                        { value: 10, label: "10 resources" },
-                        { value: 20, label: "20 resources" }
+                        { value: 10, label: "10 voicemails" },
+                        { value: 20, label: "20 voicemails" }
                         ]
                     }}
                     stickyColumnsPreference={{

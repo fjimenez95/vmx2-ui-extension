@@ -26,15 +26,15 @@ import AudioPlayer from './components/AudioPlayer';
 // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: function App({signOut, user}) {}
 function App() {
   // INSERT YOUR API URL HERE
-  const API_URL = process.env.API_URL || "INSERT_YOUR_API_URL_HERE"
+  const API_URL = process.env.API_URL || "https://ksi4keqph9.execute-api.us-east-1.amazonaws.com/prod/voicemail"
   console.log("API_URL", API_URL)
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.username}
   // THIS USER NAME ATTRIBUTE SHOULD MATCH THE AGENT'S USER NAME IN AMAZON CONNECT
-  const USERNAME = "INSERT_COGNITO_USERNAME_HERE"
+  const USERNAME = "freddyjimenez"
   const CONTACTID = ""
   // ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: {user.attributes.<attribute_name_with_user_id_in_it>}
   // THIS USER ID ATTRIBUTE SHOULD MATCH THE AGENT'S USER ID IN AMAZON CONNECT
-  const USER_ID = "INSERT_COGNITO_USERID_HERE"
+  const USER_ID = "73fa94d0-f885-4e05-99a9-061679083b45"
 
   const ONLOAD_BODY = {
     'action': 'ONLOAD', 
@@ -65,9 +65,13 @@ function App() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [totalUnread, setTotalUnread] = useState("");
   const [filteringText, setFilteringText] = useState("")
-  const [visibleDeleteModal, setVisibleDeleteModal] = useState(false)
-  const [visibleDeleteLoadingButton, setVisibleDeleteLoadingButton] = useState(false)
+  const [visibleDeleteModal, setVisibleDeleteModal] = useState(false);
+  const [visibleDeleteLoadingButton, setVisibleDeleteLoadingButton] = useState(false);
   const audioElem = useRef(0);
+  const [pageCount, setPageCount] = useState(1);
+  const [currPageIndex, setCurrPageIndex] = useState(1);
+  const [splicedList, setSplicedList] = useState([]);
+  const [countTextVisible, setCountTextVisible] = useState(false);
 
   // HANDLES AUDIO ELEMENT AND PLAYER TIME
   const onPlaying = async () => {
@@ -176,6 +180,14 @@ function App() {
       setTotalUnread(newlist.filter(item => item.unread === true).length)
       setVoicemailList(newlist)
       setFilteredVoicemailList(newlist)
+      var size = 10; 
+      var splicing_response = [];
+      for (var i=0; i<filteredVoicemailList.length; i+=size) {
+        splicing_response.push(filteredVoicemailList.slice(i,i+size));
+      }
+      console.log(splicing_response);
+      setSplicedList(splicing_response)
+      setPageCount(splicedList.length)
       setOnload(false)
       return newlist
     } catch (error) {
@@ -269,6 +281,14 @@ function App() {
           visibleDeleteModal={visibleDeleteModal}
           setVisibleDeleteModal={setVisibleDeleteModal}
           visibleDeleteLoadingButton={visibleDeleteLoadingButton}
+          pageCount={pageCount}
+          setPageCount={setPageCount}
+          currPageIndex={currPageIndex}
+          setCurrPageIndex={setCurrPageIndex}
+          splicedList={splicedList}
+          setSplicedList={setSplicedList}
+          countTextVisible={countTextVisible}
+          setCountTextVisible={setCountTextVisible}
           />
     </div>
   );
