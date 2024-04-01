@@ -1,0 +1,61 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify9820038421224-staging-165229-authRole",
+      "UnauthRoleArn": "arn:aws:iam::297747336496:role/amplify-amplify9820038421224-staging-165229-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::297747336496:role/amplify-amplify9820038421224-staging-165229-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-amplify9820038421224-staging-165229-deployment",
+      "UnauthRoleName": "amplify-amplify9820038421224-staging-165229-unauthRole",
+      "StackName": "amplify-amplify9820038421224-staging-165229",
+      "StackId": "arn:aws:cloudformation:us-east-1:297747336496:stack/amplify-amplify9820038421224-staging-165229/39ea44f0-f048-11ee-8aba-0affd4fa8181",
+      "AmplifyAppId": "d1odoe6tuqqet"
+    }
+  },
+  "auth": {
+    "vmx2uiextension": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "signupAttributes": [],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+          ]
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify9820038421224-staging-165229-deployment/amplify-cfn-templates/auth/vmx2uiextension-cloudformation-template.json",
+        "logicalId": "authvmx2uiextension"
+      },
+      "lastPushTimeStamp": "2024-04-01T16:56:47.480Z",
+      "output": {
+        "UserPoolId": "us-east-1_uOi4ANgjr",
+        "AppClientIDWeb": "10vltkn3c644e0s0ee9sub0uqk",
+        "AppClientID": "372n5f98ibiuopqv219v7ccpf2",
+        "IdentityPoolId": "us-east-1:4a78713b-e471-4834-ab61-e944a4425ce3",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:297747336496:userpool/us-east-1_uOi4ANgjr",
+        "IdentityPoolName": "testAuthIdentityPool__staging",
+        "UserPoolName": "vmx2uiextension"
+      },
+      "lastPushDirHash": "uw4fKFg7DFrYK4rnmtZAvvSXL68="
+    }
+  }
+}
