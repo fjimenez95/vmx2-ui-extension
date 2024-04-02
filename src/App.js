@@ -24,14 +24,10 @@ import VoicemailTable from './components/VoicemailTable';
 import AudioPlayer from './components/AudioPlayer';
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import { withAuthenticator } from '@aws-amplify/ui-react'
+import { fetchAuthSession } from 'aws-amplify/auth';
 
-// ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: function App({signOut, user}) {}
 function App({ signOut, user }) {
-  // INSERT YOUR API URL HERE
   const API_URL = process.env.REACT_APP_API_URL
-  console.log("API_URL", API_URL)
-  console.log("user", user)
-  // DEFINES CONSTANTS, STATE
   const [voicemailList, setVoicemailList] = useState([])
   const [filteredVoicemailList, setFilteredVoicemailList] = useState([])
   const [isPlaying, setIsPlaying] = useState(false);
@@ -70,16 +66,16 @@ function App({ signOut, user }) {
   // MAIN API FETCHER
   const fetchData = async (USER_ID) => {
     try {
+      const { idToken } = (await fetchAuthSession()).tokens ?? {}; // Get the current session and ID token
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-          // Include any other headers your API requires
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
         },
         body: JSON.stringify({
           'action': 'ONLOAD', 
           'userId': USER_ID
-          // INCLUDE ANY OTHER BODY PARAMTERS YOUR API EXPECTS
         }),
       });
 
@@ -98,18 +94,18 @@ function App({ signOut, user }) {
   // MARKS VOICEMAILS UNREAD, TRUE OR FALSE
   const markUnread = async (state, contactId) => {  
     try {
+      const { idToken } = (await fetchAuthSession()).tokens ?? {}; // Get the current session and ID token
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-          // Include any other headers your API requires
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
         },
         body: JSON.stringify({
           'action': 'READ',
           'username': globalUsername, // From ONLOAD
           'contactId': contactId, // UPDATED IN markUnread
           'unread': state // UPDATED IN markUnread
-          // INCLUDE ANY OTHER BODY PARAMTERS YOUR API EXPECTS
         }),
       });
 
@@ -126,25 +122,23 @@ function App({ signOut, user }) {
   // DELETES VOICEMAILS
   const handleDelete = async (contactId) => {
     setVisibleDeleteLoadingButton(true);
+    const { idToken } = (await fetchAuthSession()).tokens ?? {}; // Get the current session and ID token
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-          // Include any other headers your API requires
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
         },
         body: JSON.stringify({
           'action': 'DELETE',
           'username': globalUsername, // From ONLOAD
           'contactId': contactId, // UPDATED IN handleDelete
-          // INCLUDE ANY OTHER BODY PARAMTERS YOUR API EXPECTS
         }),
       });
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
       await response.json();
       await handleRefresh();
       setVisibleDeleteModal(false);
@@ -199,7 +193,6 @@ function App({ signOut, user }) {
       setSelectedItems([])
       const voicemailList = await fetchVoicemails()
       setFilteringText("")
-      console.log("REFRESH", voicemailList)
     } catch (error) {
       console.log("There was a problem with the fetch operation:", error)
       setOnload(false);
@@ -218,10 +211,8 @@ function App({ signOut, user }) {
     }
     else {
       audioElem.current.pause();
-      console.log(11)
     }
   }, [isPlaying, currentSong])
-
 
   return (
     <div className="App">
@@ -285,5 +276,4 @@ function App({ signOut, user }) {
   );
 }
 
-// ONCE AMPLIFY AUTHENTICATION IS DEPLOYED CHANGE THE LINE BELOW TO: export default withAuthenticator(App);
 export default withAuthenticator(App);
