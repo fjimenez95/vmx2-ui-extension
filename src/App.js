@@ -137,8 +137,8 @@ function App({ signOut, user }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       await response.json();
-      await handleRefresh();
       setVisibleDeleteModal(false);
+      await handleRefresh();
       setVisibleDeleteLoadingButton(false);
       return
     } catch (error) {
