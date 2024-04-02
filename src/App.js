@@ -52,7 +52,6 @@ function App({ signOut, user }) {
   const onPlaying = async () => {
     const duration = audioElem.current.duration;
     const ct = audioElem.current.currentTime;
-    console.log("AUDIOELEM", audioElem)
     if (duration > 0) {
       var time_duration = new Date(duration * 1000).toISOString().substring(14, 19)
       var time_ct = new Date(ct * 1000).toISOString().substring(14, 19)
@@ -78,11 +77,9 @@ function App({ signOut, user }) {
           'userId': USER_ID
         }),
       });
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
       const data = await response.json();
       return data
     } catch (error) {
@@ -172,7 +169,6 @@ function App({ signOut, user }) {
       for (var i=0; i<newlist.length; i+=size) {
         splicing_response.push(newlist.slice(i,i+size));
       }
-      console.log(splicing_response);
       setSplicedList(splicing_response)
       setPageCount(splicing_response.length)
       setOnload(false)
