@@ -466,16 +466,70 @@ Want a quicker way to get started? You can deploy the resources above with [this
     ```
 1. Test a voicemail. You should see an item created in your newly created DynamoDB table.
 1. Clone this repository locally and connect it to a Git repository so that it can be accessed by AWS Amplify such as GitHub, Bitbucket, GitLab (not AWS GitLab), AWS CodeCommit, etc.
-1. In your terminal move into the root of the directory cd vmx-ui-extension
-1. Install the dependencies for the CDK project by running `npm install`
-1. Update the API_URL variable with your invoke URL as an output from the CloudFormation template.
 1. Open [AWS Amplify](https://us-east-1.console.aws.amazon.com/amplify/home?region=us-east-1#/) in the same region as your resources and select **New app** > **Host web app**.
-1. Connect your source code from a Git repository or upload files.
-1. Once deployed, you should be able to access this application from your URL.
-1. In AWS Amplify, select **Backend environments** > **Launch Studio**.
-1. Select **Authentication** on the left hand pane.
-1. Select **Add login mechanism**. Configure your authentication method. You will need to configure sign-up, however you can remove this later - as most users will probably prefer to not have anyone sign up.
-    * You can set up a `UserId` attribute under **Add attribute**. You can do this now or do this later in AWS Cognito. This will be required to pull in user information and Amazon Connect routing profile details upon login. This attribute will let UI know which Queues are associated to the routing profile of the user and what emails can be displayed.
-1. Once you've completed setup, you can add authentication into your app. Learn more [here](https://docs.amplify.aws/javascript/build-a-backend/auth/set-up-auth/) on how to get set up with Authentication in a few steps.
-1. Once authentication is added, there are notes in **App.js** that are commented `// ONCE AMPLIFY AUTHENTICATION IS DEPLOYED`. Make these changes. The goal here is to ensure you are passing the right variables from your Cognito user in your API calls.
+1. Connect your cloned source code from a Git repository or upload files.
+1. Update your **Build and test settings** to the following code:
+    ````
+       version: 1
+        backend:
+          phases:
+            build:
+              commands:
+                - '# Execute Amplify CLI with the helper script'
+                - amplifyPush --simple
+        frontend:
+          phases:
+            preBuild:
+              commands:
+                - npm ci
+            build:
+              commands:
+                - REACT_APP_API_URL=${REACT_APP_API_URL}
+                - npm run build
+          artifacts:
+            baseDirectory: build
+            files:
+              - '**/*'
+          cache:
+            paths:
+              - .npm/**/*
+    ````
+1. Under **Environment variables** enter:
+    1. Key: `REACT_APP_API_URL`
+    2. Value: `<API URL generated from CloudFormation template>`
+1. Under **Live package updates** > **Add package version override** to **Amplify CLI** > Version **latest**.
+1. Leave all other defaults and select **Next**.
+1. Review your inputs and select **Save and deploy**.
+1. While your front end is deploying, select the **Backend environments** tab.
+1. Select **Get started** to provision your backend. This will set up Amplify Studio and may take a few minutes.
+1. Once your backend environment has been set up, select **Launch Studio**.
+1. On the left hand side, select **Authentication**.
+1. Select **Start from scratch** and configure your login. I suggest using email, but this can be your own preference.
+1. Configure sign-up. Select **Add attribute** > **Locale**, **Preferred username** and **Name**. These 3 attributes are used by this application. You can also set this up without these, but if you require them here this will help prevent anyone creating any users in this user pool without these attributes.
+1. Select **Deploy** > **Confirm deployment**. This will take a few minutes.
+1. Under **Hosting environments** tab, under the main branch, select **Edit** after “Continuous deploys set up”
+1. Select your **backend environment** (e.g. staging).
+1. Navigate to **Amazon Cognito**.
+1. Open the provisioned user pool by Amplify and create a user. Be sure to select the correct one as there will be two user pools - your backend user pool and the frontend user pool.
+1. Edit **User attributes** to ensure there is a **locale**, **name**, and **preferred_username**.
+    * `locale` = AMAZON CONNECT USER ID
+    * `name` = Name to display on UI
+    * `preferred_username` = AMAZON CONNECT USER NAME
+1. Navigate to **API Gateway** and select **VMX2UI-VoicemailCRUDAPI** API.
+1. On the left hand side, select **Authorizers** > **Create authorizer**.
+1. Provide an **Authorizer name** and select **Cognito** as your **Authorizer type**.
+1. Select the Cognito user pool provisioned by Amplify.
+1. For Token source, enter `Authorization`.
+1. Select **Create authorizer**.
+1. On the left hand side, select **Resources**.
+1. Select `POST`.
+1. Edit your **Method request settings**.
+1. Change **Authorization** to the Cognito user pool authorizer you created.
+1. Select **Save**.
+1. Select **Deploy API** > Stage **prod** > **Deploy**.
+1. After complete, redeploy your build in Amplify to ensure it is connected to your backend environment.
+1. Go to your Amplify URL, login, and test your UI by placing a voicemail call! You have completed your setup.
+
+## Other things to consider
+* You may want to remove the ability for users to sign-up since you will want to provision these details in Cognito. Plus, Amazon Connect users may not know their user id.
 
