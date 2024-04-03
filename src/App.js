@@ -214,7 +214,7 @@ function App({ signOut, user }) {
     <div className="App">
         {/* PAGE HEADER */}
         <Header 
-          fullName={globalName}
+          signInId={user.signInDetails.loginId}
           signOut={signOut}
           />
         {/* DISPLAYS STATUS OF UNREAD VOICEMAILS */}

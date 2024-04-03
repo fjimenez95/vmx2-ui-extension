@@ -8,7 +8,7 @@ function Header(props) {
     return (
         <div className='Header'>
             <img src={Logo} height="35px" alt="Visual Voicemail for Amazon Connect" />
-            <div className="header-name"><span id="ember-light">Signed in as &nbsp;</span>{props.fullName}</div>
+            <div className="header-name"><span id="ember-light">Signed in as &nbsp;</span>{props.signInId}</div>
             <Button iconName="close" variant="primary" onClick={props.signOut}>Sign out</Button>
         </div>
     )
