@@ -456,7 +456,7 @@ Want a quicker way to get started? You can deploy the resources above with [this
                   return []
       </code></pre>
     </details>
-1. **AWS API Gateway - Rest API** to handle CRUD designed in AWS Lambda function above. This will provide an invoke URL for use in your application. By default, this API has no level of authentication. Note that API Gateway should generally be protected by authorization or api key. Be sure to update this for your use case.
+1. **AWS API Gateway - Rest API** to handle CRUD designed in AWS Lambda function above. This will provide an invoke URL for use in your application. By default, this API is deployed with no level of authentication. Note that API Gateway should generally be protected by authorization or api key. **There are instructions below to ensure only users logged into your application can call this API.** Be sure to update this for your use case.
 
 ## To get started
 1. Run the [CloudFormation](https://d1khg2kbc0gpyh.cloudfront.net/3papp/vmx2-uiextension.yaml) stack to deploy the resources above. Save the VoicemailAPIEndpoint invoke URL as you will need this in your application.
