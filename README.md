@@ -470,29 +470,29 @@ Want a quicker way to get started? You can deploy the resources above with [this
 1. Connect your cloned source code from a Git repository or upload files.
 1. Update your **Build and test settings** to the following code:
     ````
-       version: 1
-        backend:
-          phases:
-            build:
-              commands:
-                - '# Execute Amplify CLI with the helper script'
-                - amplifyPush --simple
-        frontend:
-          phases:
-            preBuild:
-              commands:
-                - npm ci
-            build:
-              commands:
-                - REACT_APP_API_URL=${REACT_APP_API_URL}
-                - npm run build
-          artifacts:
-            baseDirectory: build
-            files:
-              - '**/*'
-          cache:
-            paths:
-              - .npm/**/*
+    version: 1
+    backend:
+        phases:
+        build:
+            commands:
+            - '# Execute Amplify CLI with the helper script'
+            - amplifyPush --simple
+    frontend:
+        phases:
+        preBuild:
+            commands:
+            - npm ci
+        build:
+            commands:
+            - REACT_APP_API_URL=${REACT_APP_API_URL}
+            - npm run build
+        artifacts:
+        baseDirectory: build
+        files:
+            - '**/*'
+        cache:
+        paths:
+            - .npm/**/*
     ````
 1. Under **Environment variables** enter:
     1. Key: `REACT_APP_API_URL`
