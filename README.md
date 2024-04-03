@@ -531,5 +531,5 @@ Want a quicker way to get started? You can deploy the resources above with [this
 1. Go to your Amplify URL, login, and test your UI by placing a voicemail call! You have completed your setup.
 
 ## Other things to consider
-* You may want to remove the ability for users to sign-up since you will want to provision these details in Cognito. Plus, Amazon Connect users may not know their user id.
+* You may want to remove the ability for users to sign-up since you will want to provision these details in Cognito. Plus, Amazon Connect users may not know their user id and this is required to avoid any errors in the experience. You can update this by replacing your `export default withAuthenticator(App)` to `export default withAuthenticator(App, {hideSignUp: true});`. This has been implemented by default but can be switched back.
 
