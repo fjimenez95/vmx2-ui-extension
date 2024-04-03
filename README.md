@@ -532,4 +532,5 @@ Want a quicker way to get started? You can deploy the resources above with [this
 
 ## Other things to consider
 * You may want to remove the ability for users to sign-up since you will want to provision these details in Cognito. Plus, Amazon Connect users may not know their user id and this is required to avoid any errors in the experience. You can update this by replacing your `export default withAuthenticator(App)` to `export default withAuthenticator(App, {hideSignUp: true});`. This has been implemented by default but can be switched back.
+* Voicemails in your S3 bucket will follow your lifecycle policy unless you change this configuration. If you delete a voicemail in this UI, it will only delete the item from the DynamoDB tracker and not the object from the S3 bucket where the voicemail is sitting.
 
